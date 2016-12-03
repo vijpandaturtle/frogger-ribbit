@@ -1,0 +1,25 @@
+body {
+  text-align: center;
+  background:  #80ccff; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top,  #009999, #005580,#008080); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right,  #009999, #005580,#008080); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right,  #009999, #005580,#008080); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right,  #009999, #005580,#008080); /* Standard syntax */
+}
+
+.tag-line {
+  font-family: roboto,sans-serif;
+  font-weight: bold;
+
+}
+
+.instructions {
+  font-size: 1.2em;
+  font-weight: lighter;
+  color: black;
+  font-style: italic;
+}
+
+ul {
+  list-style-type: none;
+}
