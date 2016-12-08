@@ -23,7 +23,7 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,key;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -47,7 +47,8 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
          update(dt);
-         render();
+        // render();
+        renderStartScreen();
          /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
          */
@@ -59,7 +60,7 @@ var Engine = (function(global) {
         win.requestAnimationFrame(main);
     }
 
-    /* This function does some initial setup that should only occur once,
+  /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
      * game loop.
      */
@@ -140,6 +141,65 @@ var Engine = (function(global) {
 
         renderEntities();
     }
+
+    function renderStartScreen() {
+        ctx.fillStyle = "grey";
+        ctx.rect(0,83,canvas.height,canvas.width);
+        ctx.fill();
+        ctx.font = "Bold 20pt Sans-serif";
+        ctx.fillStyle = "black";
+        ctx.fillText("Welcome to Frogger!!Have fun!! ",20,120);
+        ctx.fillStyle = "red";
+        ctx.fillText("Choose Your Player",20,200);
+        ctx.font = "Italic 15pt Sans-serif";
+        ctx.fillStyle = "Blue";
+        ctx.fillText("When you're done just click the shift button to play..",20,480);
+
+        var charImages = [
+          'images/char-boy.png',
+          'images/char-cat-girl.png',
+          'images/char-horn-girl.png',
+          'images/char-pink-girl.png',
+          'images/char-princess-girl.png'
+    ],
+            columns = 5,
+            col;
+
+        for (col = 0; col < columns; col++) {
+            ctx.drawImage(Resources.get(charImages[col]),col*101,220);
+}
+
+var Selector = function(x,y) {
+  this.sprite = "images/Selector.png";
+  this.x = x;
+  this.y = y;
+}
+
+Selector.prototype.handleInput = function(key) {
+  if(key =='left' && this.x > 2) {
+  this.x -= 101;
+  }
+  if(key =='right' && this.x < 500) {
+  this.x += 101;
+  }
+};
+
+Selector.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
+}
+
+document.addEventListener('keyup', function(e) {
+    var allowedKeys = {
+        37: 'left',
+        39: 'right',
+        16: 'shift'
+    };
+    selector.handleInput(allowedKeys[e.keyCode]);
+});
+
+var selector = new Selector(3,255);
+selector.render();
+}
 
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined

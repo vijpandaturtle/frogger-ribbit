@@ -1,3 +1,5 @@
+//var game = false;
+
 //This is the character superclass.
 var Character = function(x,y) {
   this.x = x;
