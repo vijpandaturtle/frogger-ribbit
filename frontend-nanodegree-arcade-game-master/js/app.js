@@ -1,5 +1,3 @@
-//var game = false;
-
 //This is the character superclass.
 var Character = function(x,y) {
   this.x = x;
@@ -30,7 +28,6 @@ var Player = function(sprite,x,y) {
 this.sprite = sprite;
 Character.call(this,x,y);
 this.score = 0;
-this.lives = 1;
 };
 
 Player.prototype.render = function() {
@@ -53,7 +50,6 @@ Player.prototype.reset = function() {
   this.x = 200;
   this.y = 400;
   this.score = 0;
-  this.lives = 1;
 };
 
 Player.prototype.handleInput = function(direction) {
@@ -92,15 +88,9 @@ Player.prototype.renderWin = function() {
   ctx.fillText("CONGRATULATIONS!!YOU DID GREAT!!",20,100);
 };
 
-Player.prototype.renderLives = function() {
-  ctx.font = "italic 20px Sans-serif";
-  ctx.fillStyle = "black";
-  ctx.fillText("Lives : "+ player.lives,300,30);
-};
-
 //This is the gem class and all its methods.
 var Gem = function(x,y) {
-  this.sprite = "images/Gem Green.png";
+  this.sprite = "images/Gem Orange.png";
   Character.call(this,x,y);
 };
 
@@ -123,26 +113,26 @@ Gem.prototype.checkCollisions = function() {
 };
 
 //This is the heart class and all its methods.
-var Heart = function(x,y) {
-  this.sprite = "images/Heart.png";
+var Star = function(x,y) {
+  this.sprite = "images/Star.png";
   Character.call(this,x,y);
 };
 
-Heart.prototype.render = function() {
+Star.prototype.render = function() {
 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Heart.prototype.update = function() {
+Star.prototype.update = function() {
   this.x = Math.floor(Math.random()*20);
   this.y = Math.floor(Math.random()*100);
-  player.lives += 1;
+  player.score += 10;
 };
 
-Heart.prototype.checkCollisions = function() {
+Star.prototype.checkCollisions = function() {
     if(this.x < player.x + 50 && this.x + 50 > player.x
       && this.y < player.y + 30 && this.y + 30 > player.y ) {
-        heart.update();
-        player.renderLives();
+        star.update();
+        player.renderScore();
         };
 };
 
@@ -155,9 +145,9 @@ var allEnemies = [
   new Enemy(200,50)
 ]
 
-var gem = new Gem(50,150);
+var gem = new Gem(100,150);
 
-var heart = new Heart(200,225);
+var star = new Star(200,225);
 
 //Event listener for moving player.
 document.addEventListener('keyup', function(e) {
@@ -165,7 +155,8 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        16: 'shift'
     };
     player.handleInput(allowedKeys[e.keyCode]);
 });

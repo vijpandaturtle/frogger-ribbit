@@ -23,7 +23,7 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime,key;
+        lastTime;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -47,8 +47,8 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
          update(dt);
-        // render();
-        renderStartScreen();
+         //render();
+        //renderStartScreen();
          /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
          */
@@ -83,7 +83,7 @@ var Engine = (function(global) {
         updateEntities(dt);
         player.checkCollisions();
         gem.checkCollisions();
-        heart.checkCollisions();
+        star.checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -175,13 +175,17 @@ var Selector = function(x,y) {
   this.y = y;
 }
 
-Selector.prototype.handleInput = function(key) {
-  if(key =='left' && this.x > 2) {
-  this.x -= 101;
-  }
-  if(key =='right' && this.x < 500) {
-  this.x += 101;
-  }
+Selector.prototype.handleInput = function() {
+var key = null;
+  switch (key) {
+   case 'left':
+    this.x -= 101;
+    break;
+   case 'right':
+    this.x += 101;
+    break;
+//  case 'shift':
+}
 };
 
 Selector.prototype.render = function() {
@@ -192,14 +196,18 @@ document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
         39: 'right',
-        16: 'shift'
+        16: 'shift',
+        13: 'enter'
     };
     selector.handleInput(allowedKeys[e.keyCode]);
 });
 
 var selector = new Selector(3,255);
 selector.render();
+
+//global playerChoice = charImages[image]  //Trying to define a global variable for playerChoice.
 }
+
 
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
@@ -215,17 +223,23 @@ selector.render();
 
         player.render();
         gem.render();
-        heart.render();
+        star.render();
         player.renderScore();
-        player.renderLives();
     }
 
       /* This function does nothing but it could have been a good place to
        * handle game reset states - maybe a new game menu or a game over screen
        * those sorts of things. It's only called once by the init() method.
        */
+      var game = true;   //Here i declared game as true just t test my If statement in the reset function.
+
       function reset() {
-          // noop
+        if(game==false) {
+          renderStartScreen();
+        } else {
+          render();
+          main();
+        }
         }
      /* Go ahead and load all of the images we know we're going to need to
        * draw our game level. Then set init as the callback method, so that when
@@ -241,9 +255,9 @@ selector.render();
           'images/char-horn-girl.png',
           'images/char-pink-girl.png',
           'images/char-princess-girl.png',
-          'images/Gem Green.png',
+          'images/Gem Orange.png',
           'images/Selector.png',
-          'images/Heart.png'
+          'images/Star.png'
       ]);
       Resources.onReady(init);
 
