@@ -47,7 +47,7 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
          update(dt);
-         //render();
+         render();
         //renderStartScreen();
          /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -231,13 +231,12 @@ selector.render();
        * handle game reset states - maybe a new game menu or a game over screen
        * those sorts of things. It's only called once by the init() method.
        */
-      var game = true;   //Here i declared game as true just t test my If statement in the reset function.
+      var game = false;   //Here i declared game as true just t test my If statement in the reset function.
 
       function reset() {
         if(game==false) {
           renderStartScreen();
         } else {
-          render();
           main();
         }
         }
