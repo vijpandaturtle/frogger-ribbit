@@ -223,7 +223,6 @@ selector.render();
        * handle game reset states - maybe a new game menu or a game over screen
        * those sorts of things. It's only called once by the init() method.
        */
-      var game = false;
 
       function reset() {
         if(game == false) {

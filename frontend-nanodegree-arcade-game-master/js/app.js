@@ -1,3 +1,6 @@
+var game = false;
+var currentSprite;
+
 //This is the character superclass.
 var Character = function(x,y) {
   this.x = x;
@@ -25,7 +28,7 @@ Enemy.prototype.render = function() {
 
 //This is the player subclass and all its methods.
 var Player = function(sprite,x,y) {
-this.sprite = sprite;
+this.sprite = currentSprite;
 Character.call(this,x,y);
 this.score = 0;
 };
@@ -149,16 +152,52 @@ var gem = new Gem(100,150);
 
 var star = new Star(200,225);
 
+var playerChoices = [
+      'boy',
+      'cat',
+      'horn',
+      'pink',
+      'princess'
+];
+
+var index = 0;
+
+
 //Event listener for moving player.
 document.addEventListener('keyup', function(e) {
+  //  console.log(e.keyCode);
+    var pressedKey;
     var allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down',
-        16: 'shift'
+        13: 'return'
     };
-    player.handleInput(allowedKeys[e.keyCode]);
+    pressedKey = allowedKeys[e.keyCode];
+    if(game) {
+     player.handleInput(pressedKey);
+   } else {
+    // console.log('Screen');
+    if(pressedKey === 'return') {
+    //  console.log('Start Game');
+      game = !game;
+    }
+    if(pressedKey === 'right') {
+      console.log('Moving Right');
+     if(index + 1 > playerChoices.length) {
+       index = 0;
+     } else {
+       index++;
+     }
+      console.log(index);
+      currentSprite = 'images/char-' + playerChoices[index] + '-girl' + '.png';
+      player.sprite = currentSprite;
+      console.log(currentSprite);
+
+
+    }
+   }
 });
 
 //Event listener for resetting player when enter button is pressed.
