@@ -47,8 +47,7 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
          update(dt);
-         render();
-        //renderStartScreen();
+         reset();
          /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
          */
@@ -175,39 +174,32 @@ var Selector = function(x,y) {
   this.y = y;
 }
 
-Selector.prototype.handleInput = function() {
-var key = null;
-  switch (key) {
-   case 'left':
-    this.x -= 101;
-    break;
-   case 'right':
-    this.x += 101;
-    break;
-//  case 'shift':
-}
-};
-
 Selector.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
 }
 
+Selector.prototype.handleInput = function(key) {
+  if(key =='left' && this.x > 20) {
+  this.x -= 101;
+  }
+  if(key =='right' && this.x < 400) {
+  this.x += 101;
+  }
+}
+
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+    var allowedKey = {
         37: 'left',
         39: 'right',
         16: 'shift',
         13: 'enter'
     };
-    selector.handleInput(allowedKeys[e.keyCode]);
+    selector.handleInput(allowedKey[e.keyCode]);
 });
 
 var selector = new Selector(3,255);
 selector.render();
-
-//global playerChoice = charImages[image]  //Trying to define a global variable for playerChoice.
 }
-
 
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
@@ -231,15 +223,15 @@ selector.render();
        * handle game reset states - maybe a new game menu or a game over screen
        * those sorts of things. It's only called once by the init() method.
        */
-      var game = false;   //Here i declared game as true just t test my If statement in the reset function.
+      var game = false;
 
       function reset() {
-        if(game==false) {
-          renderStartScreen();
+        if(game == false) {
+        renderStartScreen();
         } else {
-          main();
+        render();
         }
-        }
+    }
      /* Go ahead and load all of the images we know we're going to need to
        * draw our game level. Then set init as the callback method, so that when
        * all of these images are properly loaded our game will start.
