@@ -1,5 +1,5 @@
 var game = false;
-var currentSprite;
+//var currentSprite;
 
 //This is the character superclass.
 var Character = function(x,y) {
@@ -152,21 +152,59 @@ var gem = new Gem(100,150);
 
 var star = new Star(200,225);
 
-var playerChoices = [
+/*This function separates the functionality of the start screen from its render function.It is also easier to put all classes
+and objects required for the game in one file.This function is called inside the renderStartScreen() function in engine.js*/
+function funcStart() {
+var Selector = function(x,y) {
+this.sprite = "images/Selector.png";
+this.x = x;
+this.y = y;
+}
+
+Selector.prototype.render = function() {
+ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
+}
+
+Selector.prototype.handleInput = function() {
+if(pressedKey =='left' && this.x > 20) {
+this.x -= 101;
+}
+if(pressedKey =='right' && this.x < 400) {
+this.x += 101;
+}
+}
+
+document.addEventListener('keyup', function(e) {
+var pressedKey = window.pressedKey;
+var allowedKey = {
+    37: 'left',
+    39: 'right',
+    16: 'shift',
+    13: 'enter'
+};
+window.pressedKey = allowedKey[e.keyCode];
+console.log(pressedKey);
+selector.handleInput(window.pressedKey);
+});
+
+var selector = new Selector(1,255);
+selector.render();
+}
+
+/*var playerChoices = [
       'boy',
       'cat',
       'horn',
       'pink',
       'princess'
-];
+];*/
 
-var index = 0;
-
+//var index = 0;
 
 //Event listener for moving player.
 document.addEventListener('keyup', function(e) {
-  //  console.log(e.keyCode);
-    var pressedKey;
+  //console.log(e.keyCode);
+  //var pressedKey;
     var allowedKeys = {
         37: 'left',
         38: 'up',
@@ -174,30 +212,28 @@ document.addEventListener('keyup', function(e) {
         40: 'down',
         13: 'return'
     };
-    pressedKey = allowedKeys[e.keyCode];
-    if(game) {
-     player.handleInput(pressedKey);
-   } else {
+    //pressedKey = allowedKeys[e.keyCode];
+    //if(game) {
+     player.handleInput(/*pressedKey*/);
+   //} else {
     // console.log('Screen');
-    if(pressedKey === 'return') {
+    //if(pressedKey === 'return') {
     //  console.log('Start Game');
-      game = !game;
-    }
-    if(pressedKey === 'right') {
-      console.log('Moving Right');
-     if(index + 1 > playerChoices.length) {
-       index = 0;
-     } else {
-       index++;
-     }
-      console.log(index);
-      currentSprite = 'images/char-' + playerChoices[index] + '-girl' + '.png';
-      player.sprite = currentSprite;
-      console.log(currentSprite);
-
-
-    }
-   }
+      //game = !game;
+    //}
+    //if(pressedKey === 'right') {
+      //console.log('Moving Right');
+     //if(index + 1 > playerChoices.length) {
+       //index = 0;
+     //} else {
+       //index++;
+     //}
+      //console.log(index);
+      //currentSprite = 'images/char-' + playerChoices[index] + '-girl' + '.png';
+      //player.sprite = currentSprite;
+      //console.log(currentSprite);
+//    }
+//   }
 });
 
 //Event listener for resetting player when enter button is pressed.

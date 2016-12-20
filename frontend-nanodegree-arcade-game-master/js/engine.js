@@ -99,6 +99,35 @@ var Engine = (function(global) {
         player.update();
     }
 
+    /*This function renders the start screen which contains the player selection menu.*/
+    function renderStartScreen() {
+        ctx.fillStyle = "grey";
+        ctx.rect(0,83,canvas.height,canvas.width);
+        ctx.fill();
+        ctx.font = "Bold 20pt Sans-serif";
+        ctx.fillStyle = "black";
+        ctx.fillText("Welcome to Frogger!!Have fun!! ",20,120);
+        ctx.fillStyle = "red";
+        ctx.fillText("Choose Your Player",20,200);
+        ctx.font = "Italic 15pt Sans-serif";
+        ctx.fillStyle = "Blue";
+        ctx.fillText("When you're done just click the shift button to play..",20,480);
+      /*Holds the url for all images to be displayed on the start screen.*/
+        var charImages = [
+          'images/char-boy.png',
+          'images/char-cat-girl.png',
+          'images/char-horn-girl.png',
+          'images/char-pink-girl.png',
+          'images/char-princess-girl.png'
+    ],
+          count = 5;
+      /*Uses a for loop to iterate through images on start screen.*/
+      for (col = 0; col < count; col++) {
+            ctx.drawImage(Resources.get(charImages[col]),col*101,220);
+    }
+        funcStart();
+}
+
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
@@ -141,67 +170,7 @@ var Engine = (function(global) {
         renderEntities();
     }
 
-    function renderStartScreen() {
-        ctx.fillStyle = "grey";
-        ctx.rect(0,83,canvas.height,canvas.width);
-        ctx.fill();
-        ctx.font = "Bold 20pt Sans-serif";
-        ctx.fillStyle = "black";
-        ctx.fillText("Welcome to Frogger!!Have fun!! ",20,120);
-        ctx.fillStyle = "red";
-        ctx.fillText("Choose Your Player",20,200);
-        ctx.font = "Italic 15pt Sans-serif";
-        ctx.fillStyle = "Blue";
-        ctx.fillText("When you're done just click the shift button to play..",20,480);
-
-        var charImages = [
-          'images/char-boy.png',
-          'images/char-cat-girl.png',
-          'images/char-horn-girl.png',
-          'images/char-pink-girl.png',
-          'images/char-princess-girl.png'
-    ],
-            columns = 5,
-            col;
-
-        for (col = 0; col < columns; col++) {
-            ctx.drawImage(Resources.get(charImages[col]),col*101,220);
-}
-
-var Selector = function(x,y) {
-  this.sprite = "images/Selector.png";
-  this.x = x;
-  this.y = y;
-}
-
-Selector.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
-}
-
-Selector.prototype.handleInput = function(key) {
-  if(key =='left' && this.x > 20) {
-  this.x -= 101;
-  }
-  if(key =='right' && this.x < 400) {
-  this.x += 101;
-  }
-}
-
-document.addEventListener('keyup', function(e) {
-    var allowedKey = {
-        37: 'left',
-        39: 'right',
-        16: 'shift',
-        13: 'enter'
-    };
-    selector.handleInput(allowedKey[e.keyCode]);
-});
-
-var selector = new Selector(3,255);
-selector.render();
-}
-
-    /* This function is called by the render function and is called on each game
+   /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
@@ -225,7 +194,7 @@ selector.render();
        */
 
       function reset() {
-        if(game == false) {
+       if(game == false) {
         renderStartScreen();
         } else {
         render();
