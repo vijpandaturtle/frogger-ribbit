@@ -199,7 +199,7 @@ var Engine = (function(global) {
        */
 
       function reset() {
-       if(game == false) {
+       if(game === false) {
         renderStartScreen();
         } else {
         render();

@@ -21,7 +21,7 @@ Enemy.prototype.update = function(dt) {
 //loop for setting limits to the enemy bugs.
     if (this.x > 505) {
       this.x = 0;
-    };
+    }
 };
 
 Enemy.prototype.render = function() {
@@ -79,12 +79,11 @@ console.log(this.y);
 
 Player.prototype.checkCollisions = function() {
   for(i=0; i<allEnemies.length; i++) {
-    if(this.x < allEnemies[i].x + 60 && this.x + 60 > allEnemies[i].y
-      && this.y < allEnemies[i].y + 60 && this.y + 60 > allEnemies[i].y ) {
+    if(this.x < allEnemies[i].x + 60 && this.x + 60 > allEnemies[i].y && this.y < allEnemies[i].y + 60 && this.y + 60 > allEnemies[i].y ) {
         this.reset();
         this.renderScore();
-        };
-      };
+        }
+      }
 };
 
 Player.prototype.renderScore = function() {
@@ -117,11 +116,10 @@ Gem.prototype.update = function() {
 };
 
 Gem.prototype.checkCollisions = function() {
-    if(this.x < player.x + 50 && this.x + 50 > player.x
-      && this.y < player.y + 30 && this.y + 30 > player.y ) {
+    if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 30 && this.y + 30 > player.y ) {
         gem.update();
         player.renderScore();
-        };
+        }
 };
 
 //This is the heart class and all its methods.
@@ -141,11 +139,10 @@ Star.prototype.update = function() {
 };
 
 Star.prototype.checkCollisions = function() {
-    if(this.x < player.x + 50 && this.x + 50 > player.x
-      && this.y < player.y + 30 && this.y + 30 > player.y ) {
+ if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 30 && this.y + 30 > player.y ) {
         star.update();
         player.renderScore();
-        };
+        }
 };
 
 //Instantiation of objects.
@@ -155,7 +152,7 @@ var allEnemies = [
   new Enemy(50,150),
   new Enemy(50,225),
   new Enemy(200,50)
-]
+];
 
 var gem = new Gem(100,150);
 
