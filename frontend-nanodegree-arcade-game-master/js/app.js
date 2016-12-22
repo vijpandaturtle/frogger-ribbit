@@ -1,5 +1,5 @@
 var game = false;
-//var currentSprite;
+var currentSprite;//Global variable to hold the char selection.
 
 //This is the character superclass.
 var Character = function(x,y) {
@@ -10,6 +10,8 @@ var Character = function(x,y) {
 //This is the enemy subclass and all its methods.
 var Enemy = function(x,y) {
     this.sprite = 'images/enemy-bug.png';
+  /*This method is used to share properties of the superclass and subclass.In this case we are sharing the x and y
+  properties of the superclass character with the subclasses.This code is also used in the player,gem and star classes.*/
     Character.call(this,x,y);
     this.speed = Math.random()*(230-50) + 50;
 };
@@ -27,7 +29,7 @@ Enemy.prototype.render = function() {
 };
 
 //This is the player subclass and all its methods.
-var Player = function(sprite,x,y) {
+var Player = function(x,y) {
 this.sprite = currentSprite;
 Character.call(this,x,y);
 this.score = 0;
@@ -140,7 +142,7 @@ Star.prototype.checkCollisions = function() {
 };
 
 //Instantiation of objects.
-var player = new Player("images/char-boy.png",200,400);
+var player = new Player(200,400);
 
 var allEnemies = [
   new Enemy(50,150),
@@ -168,72 +170,66 @@ ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
 Selector.prototype.handleInput = function() {
 if(pressedKey =='left' && this.x > 20) {
 this.x -= 101;
+//console.log('Moving-left');
 }
 if(pressedKey =='right' && this.x < 400) {
 this.x += 101;
+//console.log('Moving-right');
+}
+if(pressedKey == 'return') {
+game = true;
 }
 }
 
+var pressedKey = window.pressedKey; //Global variable to hold the keycode of the key that is pressed.
+var choiceIndex = 0;//This index variable is used to iterate through the player playerChoices array.
+
 document.addEventListener('keyup', function(e) {
-var pressedKey = window.pressedKey;
 var allowedKey = {
     37: 'left',
     39: 'right',
-    16: 'shift',
+    16: 'return',
     13: 'enter'
 };
+var playerChoices = [
+  'images/char-boy.png',
+  'images/char-cat-girl.png',
+  'images/char-horn-girl.png',
+  'images/char-pink-girl.png',
+  'images/char-princess-girl.png'
+];
+
+//if(pressedKey === 'right') {
+  //if(choiceIndex + 1 > playerChoices.length) {
+    //choiceIndex = 0;
+ //} else {
+   //choiceIndex++;
+// }
+  //console.log(choiceIndex);
+  //currentSprite = playerChoices[choiceIndex];
+  //console.log(currentSprite);
+//}
 window.pressedKey = allowedKey[e.keyCode];
-console.log(pressedKey);
-selector.handleInput(window.pressedKey);
+selector.handleInput(pressedKey);
 });
 
 var selector = new Selector(1,255);
 selector.render();
 }
 
-/*var playerChoices = [
-      'boy',
-      'cat',
-      'horn',
-      'pink',
-      'princess'
-];*/
-
-//var index = 0;
-
 //Event listener for moving player.
 document.addEventListener('keyup', function(e) {
-  //console.log(e.keyCode);
-  //var pressedKey;
     var allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down',
-        13: 'return'
-    };
-    //pressedKey = allowedKeys[e.keyCode];
-    //if(game) {
-     player.handleInput(/*pressedKey*/);
-   //} else {
-    // console.log('Screen');
-    //if(pressedKey === 'return') {
-    //  console.log('Start Game');
-      //game = !game;
-    //}
-    //if(pressedKey === 'right') {
-      //console.log('Moving Right');
-     //if(index + 1 > playerChoices.length) {
-       //index = 0;
-     //} else {
-       //index++;
-     //}
-      //console.log(index);
-      //currentSprite = 'images/char-' + playerChoices[index] + '-girl' + '.png';
-      //player.sprite = currentSprite;
-      //console.log(currentSprite);
-//    }
-//   }
+        13: 'enter',
+        16: 'return'
+};
+    if(game) {
+    player.handleInput(allowedKeys[e.keyCode]);
+  }
 });
 
 //Event listener for resetting player when enter button is pressed.
