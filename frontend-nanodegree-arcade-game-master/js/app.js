@@ -1,5 +1,5 @@
-var game = false;
-var currentSprite;//Global variable to hold the char selection.
+var game = false;//Global variable to hold the game state.
+var currentSprite = window.currentSprite;//Global variable to hold the char selection.
 
 //This is the character superclass.
 var Character = function(x,y) {
@@ -10,7 +10,7 @@ var Character = function(x,y) {
 //This is the enemy subclass and all its methods.
 var Enemy = function(x,y) {
     this.sprite = 'images/enemy-bug.png';
-  /*This method is used to share properties of the superclass and subclass.In this case we are sharing the x and y
+  /*This method is used to share properties of the superclass and subclass.In this case we are sharing the x andgithub y
   properties of the superclass character with the subclasses.This code is also used in the player,gem and star classes.*/
     Character.call(this,x,y);
     this.speed = Math.random()*(230-50) + 50;
@@ -30,7 +30,7 @@ Enemy.prototype.render = function() {
 
 //This is the player subclass and all its methods.
 var Player = function(x,y) {
-this.sprite = currentSprite;
+this.sprite = window.currentSprite;
 Character.call(this,x,y);
 this.score = 0;
 };
@@ -60,15 +60,20 @@ Player.prototype.reset = function() {
 Player.prototype.handleInput = function(direction) {
 if(direction=='left' && this.x > 20) {
 this.x -= 101;
+console.log(this.x,this.y);
 }
 if(direction =='up' && this.y > 50) {
 this.y -= 83;
+console.log(this.y);
+
 }
 if(direction =='right' && this.x < 400) {
 this.x += 101;
+console.log(this.x);
 }
 if(direction =='down' && this.y < 390) {
 this.y += 83;
+console.log(this.y);
 }
 };
 
@@ -77,6 +82,7 @@ Player.prototype.checkCollisions = function() {
     if(this.x < allEnemies[i].x + 60 && this.x + 60 > allEnemies[i].y
       && this.y < allEnemies[i].y + 60 && this.y + 60 > allEnemies[i].y ) {
         this.reset();
+        this.renderScore();
         };
       };
 };
@@ -91,6 +97,7 @@ Player.prototype.renderWin = function() {
   ctx.font = "bold 20px sans-serif";
   ctx.fillStyle = "black";
   ctx.fillText("CONGRATULATIONS!!YOU DID GREAT!!",20,100);
+  window.setTimeout(player.reset(),1000);
 };
 
 //This is the gem class and all its methods.
@@ -104,8 +111,8 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 Gem.prototype.update = function() {
-  this.x = Math.floor(Math.random()*20);
-  this.y = Math.floor(Math.random()*100);
+  this.x = Math.floor(Math.random()*101);
+  this.y = Math.floor(Math.random()*83);
   player.score += 1;
 };
 
@@ -128,8 +135,8 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 Star.prototype.update = function() {
-  this.x = Math.floor(Math.random()*20);
-  this.y = Math.floor(Math.random()*100);
+  this.x = Math.floor(Math.random()*101);
+  this.y = Math.floor(Math.random()*83);
   player.score += 10;
 };
 
@@ -154,84 +161,62 @@ var gem = new Gem(100,150);
 
 var star = new Star(200,225);
 
-/*This function separates the functionality of the start screen from its render function.It is also easier to put all classes
-and objects required for the game in one file.This function is called inside the renderStartScreen() function in engine.js*/
-function funcStart() {
-var Selector = function(x,y) {
-this.sprite = "images/Selector.png";
-this.x = x;
-this.y = y;
-}
-
-Selector.prototype.render = function() {
-ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
-}
-
-Selector.prototype.handleInput = function() {
-if(pressedKey =='left' && this.x > 20) {
-this.x -= 101;
-//console.log('Moving-left');
-}
-if(pressedKey =='right' && this.x < 400) {
-this.x += 101;
-//console.log('Moving-right');
-}
-if(pressedKey == 'return') {
-game = true;
-}
-}
-
-var pressedKey = window.pressedKey; //Global variable to hold the keycode of the key that is pressed.
-var choiceIndex = 0;//This index variable is used to iterate through the player playerChoices array.
-
-document.addEventListener('keyup', function(e) {
-var allowedKey = {
-    37: 'left',
-    39: 'right',
-    16: 'return',
-    13: 'enter'
-};
-var playerChoices = [
-  'images/char-boy.png',
-  'images/char-cat-girl.png',
-  'images/char-horn-girl.png',
-  'images/char-pink-girl.png',
-  'images/char-princess-girl.png'
-];
-
-//if(pressedKey === 'right') {
-  //if(choiceIndex + 1 > playerChoices.length) {
-    //choiceIndex = 0;
- //} else {
-   //choiceIndex++;
-// }
-  //console.log(choiceIndex);
-  //currentSprite = playerChoices[choiceIndex];
-  //console.log(currentSprite);
-//}
-window.pressedKey = allowedKey[e.keyCode];
-selector.handleInput(pressedKey);
-});
-
-var selector = new Selector(1,255);
-selector.render();
-}
-
+var allowedKeys = {};//Global object to hold the allowed keys.
 //Event listener for moving player.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+document.addEventListener('keyup',function(e) {
+allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down',
         13: 'enter',
-        16: 'return'
-};
-    if(game) {
+        32: 'return',
+        48: '0',
+        49: '1',
+        50: '2',
+        51: '3',
+        52: '4'
+      };
+    var pressedKey = window.pressedKey; //Global variable to hold the keycode of the key that is pressed.
+    window.pressedKey = allowedKeys[e.keyCode];
     player.handleInput(allowedKeys[e.keyCode]);
-  }
 });
 
+/*This function separates the functionality of the start screen from its render function.It is also easier to put all classes
+and objects required for the game in one file.This function is called inside the renderStartScreen() function in engine.js*/
+function funcStart() {
+
+  var playerChoices = [
+    'images/char-boy.png',
+    'images/char-cat-girl.png',
+    'images/char-horn-girl.png',
+    'images/char-pink-girl.png',
+    'images/char-princess-girl.png'
+  ];
+
+  player.sprite = currentSprite;
+
+  switch(window.pressedKey) {
+    case '0':
+    currentSprite = playerChoices[0];
+     break;
+    case '1':
+    currentSprite = playerChoices[1];
+     break;
+    case '2':
+    currentSprite = playerChoices[2];
+     break;
+    case '3':
+    currentSprite = playerChoices[3];
+   break;
+    case '4':
+    currentSprite = playerChoices[4];
+     break;
+    case 'return':
+    game = true;
+     break;
+  }
+}
 //Event listener for resetting player when enter button is pressed.
 document.addEventListener('keypress',function(e) {
  if(13 == e.keyCode) {

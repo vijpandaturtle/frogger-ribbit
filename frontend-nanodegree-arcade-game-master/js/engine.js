@@ -111,7 +111,9 @@ var Engine = (function(global) {
         ctx.fillText("Choose Your Player",20,200);
         ctx.font = "Italic 15pt Sans-serif";
         ctx.fillStyle = "Blue";
-        ctx.fillText("When you're done just click the shift button to play..",20,480);
+        ctx.fillText("Press the number above player to choose that player.",20,480);
+        ctx.fillStyle = "green";
+        ctx.fillText("When you're done just hit the space bar to play..",20,510);
       /*Holds the url for all images to be displayed on the start screen.*/
         var charImages = [
           'images/char-boy.png',
@@ -125,6 +127,10 @@ var Engine = (function(global) {
       for (col = 0; col < count; col++) {
             ctx.drawImage(Resources.get(charImages[col]),col*101,220);
     }
+     for(x = 0; x < 5;x++) {
+       ctx.fillStyle = "black";
+       ctx.fillText(x,50+(x*101),240);
+     }
         funcStart();
 }
 
@@ -188,9 +194,8 @@ var Engine = (function(global) {
         player.renderScore();
     }
 
-      /* This function does nothing but it could have been a good place to
-       * handle game reset states - maybe a new game menu or a game over screen
-       * those sorts of things. It's only called once by the init() method.
+      /* This function handles the game states and the condition for displaying
+       * the startscreen and the game screen. It's only called once by the init() method.
        */
 
       function reset() {
