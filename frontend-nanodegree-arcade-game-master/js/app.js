@@ -36,13 +36,13 @@ Enemy.prototype.render = function() {
 var Player = function(x,y) {
 this.sprite = window.currentSprite;
 Character.call(this,x,y);
-this.score = 0;
 };
 
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   if(this.y < 50) {
     this.renderWin();
+    window.setTimeout(function(){player.reset();},2000);
   }
 };
 
@@ -56,10 +56,12 @@ if(this.y > 400 && this.y < 20) {
 }
 };
 
+/*The reset methods are used to reset the game back to its original state and reset all the objects back to their original/initial state.Although in each class the reset functions are defined in a slightly different way the purpose of the function is essentially the same.Here, when the player is reset all the other game objects are also reset to their original position or value.*/
 Player.prototype.reset = function() {
   this.x = 200;
   this.y = 400;
-  this.score = 0;
+  gem.reset();
+  star.reset();
 };
 
 /*This method is used to define the movement of the player according to the keys pressed by the user which are defined in the event listener
@@ -89,22 +91,14 @@ Player.prototype.checkCollisions = function() {
   for(i=0; i<allEnemies.length; i++) {
     if(this.x < allEnemies[i].x + 60 && this.x + 60 > allEnemies[i].y && this.y < allEnemies[i].y + 60 && this.y + 60 > allEnemies[i].y ) {
         this.reset();
-        this.renderScore();
         }
       }
-};
-
-Player.prototype.renderScore = function() {
-  ctx.font = "italic 20px Sans-serif";
-  ctx.fillStyle = "black";
-  ctx.fillText("Score : "+ player.score ,1,30);
 };
 
 Player.prototype.renderWin = function() {
   ctx.font = "bold 20px sans-serif";
   ctx.fillStyle = "black";
   ctx.fillText("CONGRATULATIONS!!YOU DID GREAT!!",20,100);
-  window.setTimeout(player.reset(),1000);
 };
 
 //This is the gem class and all its methods.This class is used to create the gem object on the game screen.
@@ -121,14 +115,17 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 Gem.prototype.update = function() {
   this.x = Math.floor(Math.random()*101); //The math random function generates aand arbitrary value between 0 and 1.
   this.y = Math.floor(Math.random()*83);
-  player.score += 1;
 };
 
 Gem.prototype.checkCollisions = function() {
-    if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 30 && this.y + 30 > player.y ) {
+    if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 50 && this.y + 50 > player.y ) {
         gem.update();
-        player.renderScore();
     }
+};
+
+Gem.prototype.reset = function() {
+  this.x = 100;
+  this.y = 150;
 };
 
 //This is the heart class and all its methods.
@@ -144,14 +141,17 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 Star.prototype.update = function() {
   this.x = Math.floor(Math.random()*101);
   this.y = Math.floor(Math.random()*83);
-  player.score += 10;
 };
 
 Star.prototype.checkCollisions = function() {
- if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 30 && this.y + 30 > player.y ) {
+ if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 40 && this.y + 40 > player.y ) {
         star.update();
-        player.renderScore();
         }
+};
+
+Star.prototype.reset = function() {
+  this.x = 200;
+  this.y = 225;
 };
 
 //Instantiation of objects.
@@ -176,7 +176,7 @@ allowedKeys = {
         39: 'right',
         40: 'down',
         13: 'enter',
-        32: 'return',
+        27: 'return',
         48: '0',
         49: '1',
         50: '2',

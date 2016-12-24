@@ -113,7 +113,7 @@ var Engine = (function(global) {
         ctx.fillStyle = "Blue";
         ctx.fillText("Press the number above player to choose that player.",20,480);
         ctx.fillStyle = "green";
-        ctx.fillText("When you're done just hit the space bar to play..",20,510);
+        ctx.fillText("When you're done just hit the escape key to play..",20,510);
       /*Holds the url for all images to be displayed on the start screen.*/
         var charImages = [
           'images/char-boy.png',
@@ -191,7 +191,6 @@ var Engine = (function(global) {
         player.render();
         gem.render();
         star.render();
-        player.renderScore();
     }
 
       /* This function handles the game states and the condition for displaying
