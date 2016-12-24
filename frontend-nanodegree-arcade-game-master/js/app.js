@@ -1,7 +1,8 @@
 var game = false;//Global variable to hold the game state.
 var currentSprite = window.currentSprite;//Global variable to hold the char selection.
 
-//This is the character superclass.
+/*This is the character superclass.In this particular contect this superclass is defined as having x and y properties so that these can
+ *be shared by all the other subclasses.It proves to be quite useful when there are several properties to be shared across multiple *subclasses.*/
 var Character = function(x,y) {
   this.x = x;
   this.y = y;
@@ -10,8 +11,8 @@ var Character = function(x,y) {
 //This is the enemy subclass and all its methods.
 var Enemy = function(x,y) {
     this.sprite = 'images/enemy-bug.png';
-  /*This method is used to share properties of the superclass and subclass.In this case we are sharing the x andgithub y
-  properties of the superclass character with the subclasses.This code is also used in the player,gem and star classes.*/
+  /*This method is used to share properties of the superclass and subclass.In this case we are sharing the x and y
+  * properties of the superclass character with the subclasses.Character.call() method is also used in the player,gem and start classes.*/
     Character.call(this,x,y);
     this.speed = Math.random()*(230-50) + 50;
 };
@@ -24,6 +25,9 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
+/*This function is used to render the image of the enemy object(bug) on the screen.This function is saved as a method
+*of the prototype object of the enemy class so that every instance of this class can share these methods and also save memory.
+*The same technique of defining methods in the prototypal class/object can be observed in all of the classes that are defined in this file.*/
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -42,6 +46,7 @@ Player.prototype.render = function() {
   }
 };
 
+//Prevents the player from moving out of the game canvas.
 Player.prototype.update = function() {
 if(this.x > 400 && this.x < 10) {
   this.reset();
@@ -57,6 +62,8 @@ Player.prototype.reset = function() {
   this.score = 0;
 };
 
+/*This method is used to define the movement of the player according to the keys pressed by the user which are defined in the event listener
+ *right before the funcStart() function.This function is also called inside of the same event listener.*/
 Player.prototype.handleInput = function(direction) {
 if(direction=='left' && this.x > 20) {
 this.x -= 101;
@@ -77,6 +84,7 @@ console.log(this.y);
 }
 };
 
+/*This method logically detects collisions that happens between the player object and any other object on the screen (in this case it is  th *the enemy object) and resets the player once the condition is satisfied.*/
 Player.prototype.checkCollisions = function() {
   for(i=0; i<allEnemies.length; i++) {
     if(this.x < allEnemies[i].x + 60 && this.x + 60 > allEnemies[i].y && this.y < allEnemies[i].y + 60 && this.y + 60 > allEnemies[i].y ) {
@@ -99,7 +107,7 @@ Player.prototype.renderWin = function() {
   window.setTimeout(player.reset(),1000);
 };
 
-//This is the gem class and all its methods.
+//This is the gem class and all its methods.This class is used to create the gem object on the game screen.
 var Gem = function(x,y) {
   this.sprite = "images/Gem Orange.png";
   Character.call(this,x,y);
@@ -109,8 +117,9 @@ Gem.prototype.render = function () {
 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+/*This function method changes the x and y coordinates of the game object randomly after each successive collision.It also updates the score *of the player.A similar method is used in the Star class.*/
 Gem.prototype.update = function() {
-  this.x = Math.floor(Math.random()*101);
+  this.x = Math.floor(Math.random()*101); //The math random function generates aand arbitrary value between 0 and 1.
   this.y = Math.floor(Math.random()*83);
   player.score += 1;
 };
@@ -119,7 +128,7 @@ Gem.prototype.checkCollisions = function() {
     if(this.x < player.x + 50 && this.x + 50 > player.x && this.y < player.y + 30 && this.y + 30 > player.y ) {
         gem.update();
         player.renderScore();
-        }
+    }
 };
 
 //This is the heart class and all its methods.
@@ -158,7 +167,7 @@ var gem = new Gem(100,150);
 
 var star = new Star(200,225);
 
-var allowedKeys = {};//Global object to hold the allowed keys.
+var allowedKeys = {};//Global object to hold the allowed keys.Being in the global scope makes it easier for other functions to access this object.
 //Event listener for moving player.
 document.addEventListener('keyup',function(e) {
 allowedKeys = {
