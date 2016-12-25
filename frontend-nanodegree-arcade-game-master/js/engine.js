@@ -13,7 +13,6 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
-
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
@@ -33,7 +32,7 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
 
-   function main() {
+    function main() {
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -46,9 +45,9 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-         update(dt);
-         reset();
-         /* Set our lastTime variable which is used to determine the time delta
+        update(dt);
+        reset();
+        /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
          */
         lastTime = now;
@@ -59,7 +58,7 @@ var Engine = (function(global) {
         win.requestAnimationFrame(main);
     }
 
-  /* This function does some initial setup that should only occur once,
+    /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
      * game loop.
      */
@@ -102,37 +101,37 @@ var Engine = (function(global) {
     /*This function renders the start screen which contains the player selection menu.*/
     function renderStartScreen() {
         ctx.fillStyle = "grey";
-        ctx.rect(0,83,canvas.height,canvas.width);
+        ctx.rect(0, 83, canvas.height, canvas.width);
         ctx.fill();
         ctx.font = "Bold 20pt Sans-serif";
         ctx.fillStyle = "black";
-        ctx.fillText("Welcome to Frogger!!Have fun!! ",20,120);
+        ctx.fillText("Welcome to Frogger!!Have fun!! ", 20, 120);
         ctx.fillStyle = "red";
-        ctx.fillText("Choose Your Player",20,200);
+        ctx.fillText("Choose Your Player", 20, 200);
         ctx.font = "Italic 15pt Sans-serif";
         ctx.fillStyle = "Blue";
-        ctx.fillText("Press the number above player to choose that player.",20,480);
+        ctx.fillText("Press the number above player to choose that player.", 20, 480);
         ctx.fillStyle = "green";
-        ctx.fillText("When you're done just hit the escape key to play..",20,510);
-      /*Holds the url for all images to be displayed on the start screen.*/
+        ctx.fillText("When you're done just hit the escape key to play..", 20, 510);
+        /*Holds the url for all images to be displayed on the start screen.*/
         var charImages = [
-          'images/char-boy.png',
-          'images/char-cat-girl.png',
-          'images/char-horn-girl.png',
-          'images/char-pink-girl.png',
-          'images/char-princess-girl.png'
-    ],
-          count = 5;
-      /*Uses a for loop to iterate through images on start screen.*/
-      for (col = 0; col < count; col++) {
-            ctx.drawImage(Resources.get(charImages[col]),col*101,220);
-    }
-     for(x = 0; x < 5;x++) {
-       ctx.fillStyle = "black";
-       ctx.fillText(x,50+(x*101),240);
-     }
+                'images/char-boy.png',
+                'images/char-cat-girl.png',
+                'images/char-horn-girl.png',
+                'images/char-pink-girl.png',
+                'images/char-princess-girl.png'
+            ],
+            count = 5;
+        /*Uses a for loop to iterate through images on start screen.*/
+        for (col = 0; col < count; col++) {
+            ctx.drawImage(Resources.get(charImages[col]), col * 101, 220);
+        }
+        for (x = 0; x < 5; x++) {
+            ctx.fillStyle = "black";
+            ctx.fillText(x, 50 + (x * 101), 240);
+        }
         funcStart();
-}
+    }
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -145,12 +144,12 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
+                'images/water-block.png', // Top row is water
+                'images/stone-block.png', // Row 1 of 3 of stone
+                'images/stone-block.png', // Row 2 of 3 of stone
+                'images/stone-block.png', // Row 3 of 3 of stone
+                'images/grass-block.png', // Row 1 of 2 of grass
+                'images/grass-block.png' // Row 2 of 2 of grass
             ],
             numRows = 6,
             numCols = 5,
@@ -176,7 +175,7 @@ var Engine = (function(global) {
         renderEntities();
     }
 
-   /* This function is called by the render function and is called on each game
+    /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
@@ -193,40 +192,40 @@ var Engine = (function(global) {
         star.render();
     }
 
-      /* This function handles the game states and the condition for displaying
-       * the startscreen and the game screen. It's only called once by the init() method.
-       */
+    /* This function handles the game states and the condition for displaying
+     * the startscreen and the game screen. It's only called once by the init() method.
+     */
 
-      function reset() {
-       if(game === false) {
-        renderStartScreen();
+    function reset() {
+        if (game === false) {
+            renderStartScreen();
         } else {
-        render();
+            render();
         }
     }
-     /* Go ahead and load all of the images we know we're going to need to
-       * draw our game level. Then set init as the callback method, so that when
-       * all of these images are properly loaded our game will start.
-       */
-      Resources.load([
-          'images/stone-block.png',
-          'images/water-block.png',
-          'images/grass-block.png',
-          'images/enemy-bug.png',
-          'images/char-boy.png',
-          'images/char-cat-girl.png',
-          'images/char-horn-girl.png',
-          'images/char-pink-girl.png',
-          'images/char-princess-girl.png',
-          'images/Gem Orange.png',
-          'images/Selector.png',
-          'images/Star.png'
-      ]);
-      Resources.onReady(init);
+    /* Go ahead and load all of the images we know we're going to need to
+     * draw our game level. Then set init as the callback method, so that when
+     * all of these images are properly loaded our game will start.
+     */
+    Resources.load([
+        'images/stone-block.png',
+        'images/water-block.png',
+        'images/grass-block.png',
+        'images/enemy-bug.png',
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/Gem Orange.png',
+        'images/Selector.png',
+        'images/Star.png'
+    ]);
+    Resources.onReady(init);
 
-      /* Assign the canvas' context object to the global variable (the window
-       * object when run in a browser) so that developers can use it more easily
-       * from within their app.js files.
-       */
-      global.ctx = ctx;
-  })(this);
+    /* Assign the canvas' context object to the global variable (the window
+     * object when run in a browser) so that developers can use it more easily
+     * from within their app.js files.
+     */
+    global.ctx = ctx;
+})(this);
